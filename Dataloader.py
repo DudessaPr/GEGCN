@@ -127,7 +127,8 @@ def construct_adjacency_matrix(features, k_nearest_neighobrs, prunning_one, prun
 
     if prunning_one:
         # Pruning strategy 1
-        original_adj = adj.A
+        # `A` is not available in some SciPy sparse builds; use explicit conversion.
+        original_adj = adj.toarray()
         judges_matrix = original_adj == original_adj.T
         adj = original_adj * judges_matrix
         adj = ss.csc_matrix(adj)
@@ -137,7 +138,7 @@ def construct_adjacency_matrix(features, k_nearest_neighobrs, prunning_one, prun
 
     if prunning_two:
         # Pruning strategy 2
-        adj = adj.A
+        adj = adj.toarray()
         b = np.nonzero(adj)
         rows = b[0]
         cols = b[1]
